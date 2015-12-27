@@ -1,0 +1,97 @@
+[{
+    "name": "British Museum",
+    "latitude": 51.519459,
+    "longitude": -0.126931,
+    "icon": "university",
+    "color": "blue"
+}, {
+    "name": "British Library",
+    "latitude": 51.52944,
+    "longitude": -0.12694,
+    "icon": "university",
+    "color": "blue"
+}, {
+    "name": "Victoria and Albert Museum",
+    "latitude": 51.496667,
+    "longitude": -0.171944,
+    "icon": "university",
+    "color": "blue"
+}, {
+    "name": "Buckingham Palace",
+    "latitude": 51.50083,
+    "longitude": -0.14194,
+    "icon": "eye",
+    "color": "blue"
+},  {
+    "name": "Tower of London",
+    "latitude": 51.50806,
+    "longitude": -0.07611,
+    "icon": "eye",
+    "color": "blue"
+}, {
+    "name": "Trafalgar Square",
+    "latitude": 51.508056,
+    "longitude": -0.128056,
+    "icon": "eye",
+    "color": "blue"
+}, {
+    "name": "Piccadilly Circus",
+    "latitude": 51.51000,
+    "longitude": -0.13444,
+    "icon": "eye",
+    "color": "blue"
+}, {
+    "name": "Covent Garden Market",
+    "latitude": 51.512,
+    "longitude": -0.123,
+    "icon": "eye",
+    "color": "blue"
+}, {
+    "name": "St Paul's Cathedral",
+    "latitude": 51.513511,
+    "longitude": -0.098056,
+    "icon": "eye",
+    "color": "blue"
+}, {
+    "name": "Hyde Park",
+    "latitude": 51.508611,
+    "longitude": -0.163611,
+    "icon": "tree",
+    "color": "blue"
+}, {
+    "name": "London Eye",
+    "latitude": 51.5033,
+    "longitude": -0.1197,
+    "icon": "eye",
+    "color": "blue"
+}, {
+    "name": "Euston station",
+    "latitude": 51.5284,
+    "longitude": -0.1331,
+    "icon": "train",
+    "color": "blue"
+}, {
+    "name": "Liverpool Street station",
+    "latitude": 51.5186,
+    "longitude": -0.0813,
+    "icon": "train",
+    "color": "blue"
+}, {
+    "name": "Paddington station",
+    "latitude": 51.5173,
+    "longitude": -0.1774,
+    "icon": "train",
+    "color": "blue"
+}, {
+    "name": "Victoria station",
+    "latitude": 51.4966,
+    "longitude": -0.1448,
+    "icon": "train",
+    "color": "blue"
+}, {
+    "name": "Waterloo station",
+    "latitude": 51.5031,
+    "longitude": -0.1132,
+    "icon": "train",
+    "color": "blue"
+}]

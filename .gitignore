@@ -1,0 +1,13 @@
+# Eclipse core
+.project
+server/node_modules
+*.log
+www/images/*.jpg
+www/images/*.gif
+www/images/*.png
+www/images/min/*.jpg
+www/images/min/*.gif
+www/images/min/*.png
+www/images/thumbnails/*.jpg
+www/images/thumbnails/*.gif
+www/images/thumbnails/*.png

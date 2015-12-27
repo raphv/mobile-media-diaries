@@ -1,0 +1,50 @@
+body {
+    font-family: "Roboto", sans-serif;
+    background: #e0e0e0; color: #000000;
+    font-size: 15px; font-weight: 300;
+}
+
+header {
+    background: #802020; color: #ffffff; font-size: 1.1em; font-weight: 700;
+    box-shadow: 0 0 4px #999;
+}
+
+h1, .main-section {
+    max-width: 600px; margin: 0 auto; padding: 10px; clear: both;
+}
+
+.main-section {
+    background: #ffffff;
+}
+
+input, textarea {
+    font-family: inherit;
+    -webkit-appearance: none;
+    border-radius: 0;
+}
+
+h2 {
+    font-weight: 500;
+}
+
+table {
+    border-collapse: collapse; margin: .5em 0;
+}
+
+th, td {
+    text-align: left; padding: .2em; border-width: 1px; border-color: #cccccc;  border-style: solid none;
+}
+
+thead {
+    background: #cccccc; font-weight: 500;
+}
+
+.id_list li {
+    margin: .2em 0; font-size: 1.1em;
+}
+
+
+footer p {
+    padding: 20px 0 0; font-size: .7em; text-align: right;
+    width: 100%; clear: both;
+}

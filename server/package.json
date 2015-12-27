@@ -1,0 +1,22 @@
+{
+  "name": "mobile-media-diary-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "basic-auth": "~1.0.3",
+    "body-parser": "~1.13.2",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "express-redirect": "~1.1.1",
+    "jade": "~1.11.0",
+    "moment": "~2.10.6",
+    "mongodb": "~2.0.39",
+    "monk": "~1.0.1",
+    "multer": "~1.0.1",
+    "gulp": "~3.9.0",
+    "gulp-image-resize": "~0.6.0"
+  }
+}

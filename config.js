@@ -1,6 +1,4 @@
 module.exports = {
-    admin_user: 'admin', // PLEASE CHANGE IN PRODUCTION
-    admin_password: 'THIS_IS_NOT_SAFE', // PLEASE CHANGE IN PRODUCTION
     db_connection: 'localhost/media-diaries',
     db_collection: 'entries',
     use_image_magick: true,
@@ -21,6 +19,7 @@ module.exports = {
         /* IMAGE BLOCK CONFIGURATION */
         show_media_block: true,
         media_block_title: "Share an image",
+        make_media_mandatory: false, // Not recommended, because Android users with low-end devices won't be able to use the app at all
         
         /* LOCATION BLOCK CONFIGURATION */
         show_location_block: true,
@@ -35,12 +34,14 @@ module.exports = {
         use_geolocation: true,
         show_locations_on_map: true,
             /* If the location list is too large, you may want to hide locations from the map */
+        make_location_mandatory: false,
         
         /* CALENDAR BLOCK CONFIGURATION */
         show_calendar_block: true,
         calendar_block_title: "Which day is it about?",
         start_date: '2015-12-01',
         end_date: '2016-01-31',
+        make_date_mandatory: false,
         
         /* EMOJI BLOCK CONFIGURATION */
         show_emoji_block: true,
@@ -53,10 +54,12 @@ module.exports = {
             "\ud83d\ude28", // 0x1f628 FEARFUL FACE
             "\ud83d\ude33", // 0x1f633 FLUSHED FACE
         ], // can be replaced by a JSON file containing the same data
+        make_emoji_mandatory: false,
         
         /* COMMENT BLOCK CONFIGURATION */
         show_comment_block: true,
         comment_block_title: "Can you tell us more about it?",
         comment_box_placeholder: "Type a comment here",
+        make_comment_mandatory: false,
     }
 };

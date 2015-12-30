@@ -1,0 +1,16 @@
+extends base
+
+block content
+    h2 #{questions.length} active question(s)
+    table(class='question_table')
+        thead
+            tr
+                th Question title
+                td Total entries
+                td Users
+        tbody
+            each question in questions
+                tr
+                    th= question.question_title
+                    td= question.entry_count
+                    td= question.user_count

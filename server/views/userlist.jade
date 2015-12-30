@@ -1,0 +1,17 @@
+extends base
+
+block content
+    h2 #{users.length} active user(s)
+    table(class='user_table')
+        thead
+            tr
+                th User id
+                td Entries
+                td(colspan=2) Last active
+        tbody
+            each user in users
+                tr
+                    th= user.user_code
+                    td= user.entry_count
+                    td= moment(user.last_active).fromNow()
+                    td= moment(user.last_active).format('DD/MM HH:mm')

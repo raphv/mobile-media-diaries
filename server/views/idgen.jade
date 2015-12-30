@@ -1,0 +1,7 @@
+extends base
+
+block content
+    h2 #{ids.length} unique IDs
+    ul(class='id_list')
+        each id in ids
+            li= id

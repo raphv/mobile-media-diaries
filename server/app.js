@@ -10,17 +10,18 @@ var express = require('express');
 var basicAuth = require('basic-auth');
 var bodyParser = require('body-parser');
 var redirect = require('express-redirect');
-var mongodb = require('mongodb');
 var monk = require('monk');
 var multer = require('multer');
 var path = require('path');
 var fs = require('fs');
 var gulp = require('gulp');
 var imageResize = require('gulp-image-resize');
+var passhash = require('password-hash');
 
 var app = express();
 var db = monk(config.db_connection);
 var collection = db.get(config.db_collection);
+var config_collection = db.get(config.db_collection + '_config');
 var destpath = path.resolve(__dirname, '../www/images');
 var upload = multer({
     storage: multer.diskStorage({
@@ -153,15 +154,22 @@ app.delete('/entry/:id([0-9a-f\-]+)', function(req, res) {
 
 /* ADMIN PAGES */
 
-/* This is an embarrassment and should be change to something more secure */
 var adminAuth = function (req, res, next) {
-    var user = basicAuth(req);
-    if (user && user.name === config.admin_user && user.pass === config.admin_password) {
-        return next();
-    } else {
-        res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-        return res.sendStatus(401);
-    };
+    config_collection.findOne({
+        key: 'admin_credentials'
+    }, function(err, admin_credentials) {
+        if (!admin_credentials) {
+            return res.status(401).send('An admin password should be configured. See README.md for more information');
+        } else {
+            var user = basicAuth(req);
+            if (user && user.name === admin_credentials.username && passhash.verify(user.pass, admin_credentials.password)) {
+                return next();
+            } else {
+                res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+                return res.sendStatus(401);
+            };
+        }
+    });
 };
 
 app.redirect('/admin$', 'admin/all/');
@@ -169,7 +177,10 @@ app.redirect('/admin/$', 'all/');
 
 app.redirect('/admin/all$', 'all/');
 app.get('/admin/all/$', adminAuth, function(req, res) {
-    res.render('adminlist', {title:'Admin pages'});
+    res.render('adminlist', {
+        title:'Admin pages',
+        config: config.client_config
+    });
 });
 
 app.get('/admin/dump-data/$', adminAuth, function(req, res) {
@@ -219,7 +230,8 @@ app.get('/admin/id-generator/$', adminAuth, function(req, res) {
             } else {
                 res.render('idgen', {
                     title: 'ID Generator',
-                    ids: tbl
+                    ids: tbl,
+                    config: config.client_config
                 });
             }
         });
@@ -251,7 +263,8 @@ app.get('/admin/active-users/$', adminAuth, function(req, res) {
         }
         res.render('userlist', {
             title: 'Active Users',
-            users: users
+            users: users,
+            config: config.client_config
         });
     });
 });
@@ -284,7 +297,8 @@ app.get('/admin/popular-questions/$', adminAuth, function(req, res) {
         });
         res.render('questionlist', {
             title: 'Popular questions',
-            questions: questions
+            questions: questions,
+            config: config.client_config
         });
     });
 });

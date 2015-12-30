@@ -1,0 +1,21 @@
+doctype html
+html
+    head
+        meta(http-equiv='Content-Type' content='text/html; charset=utf-8')
+        meta(name='viewport' content='initial-scale=1, maximum-scale=1, width=device-width, user-scalable=no')
+        title= title
+        link(rel='stylesheet', href='../../styles/reset.css')
+        link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css')
+        link(rel='stylesheet', href='//fonts.googleapis.com/css?family=Roboto:300,500,700,800')
+        link(rel='stylesheet', href='../../styles/admin.css')
+    body
+        header
+            h1
+                a(href='../all/' style='color: inherit;')
+                    i(class='fa fa-calendar')
+                |  #{config.diary_title} - #{title}
+        section(class='main-section')
+            block content
+            footer
+                p 2015 @RaphV
+    

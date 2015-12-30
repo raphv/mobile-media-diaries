@@ -317,3 +317,8 @@ footer p {
 .emoji {
     display: block; -webkit-user-select: none; -moz-user-select: none; user-select: none;
 }
+
+.mandatory-star {
+    color: #e00000; font-size: 2em; line-height: .8em; font-weight: bold;
+    display: inline-block; height: .5em; overflow: hidden; font-weight: bold;
+}

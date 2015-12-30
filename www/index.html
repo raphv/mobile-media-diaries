@@ -84,7 +84,10 @@
                 
             <ol class="lightbox-menu">
                 <li class="lightbox-menu-item" ng-show="CONFIG.show_media_block">
-                    <h3>{{CONFIG.media_block_title}}</h3>
+                    <h3>
+                        {{CONFIG.media_block_title}}
+                        <span class="mandatory-star" ng-show="CONFIG.make_media_mandatory">*</span>
+                    </h3>
                     
                     <form class="media-form" drop-image ng-class="{'dragging':dragging}">
                         <i class="fa fa-file-picture-o"></i>
@@ -106,7 +109,10 @@
                 </li>
                 
                 <li class="lightbox-menu-item" ng-show="CONFIG.show_location_block">
-                    <h3>{{CONFIG.location_block_title}}</h3>
+                    <h3>
+                        {{CONFIG.location_block_title}}
+                        <span class="mandatory-star" ng-show="CONFIG.make_location_mandatory">*</span>
+                    </h3>
                     <div class="map-preview" leaflet></div>
                     <div class="map-results" ng-show="!dropping_pin">
                         <div ng-show="editing_user_data.location" ng-click="panToPosition()">You checked in at {{editing_user_data.location}}</div>
@@ -143,7 +149,10 @@
                 </li>
                 
                 <li class="lightbox-menu-item" ng-show="CONFIG.show_calendar_block">
-                    <h3>{{CONFIG.calendar_block_title}}</h3>
+                    <h3>
+                        {{CONFIG.calendar_block_title}}
+                        <span class="mandatory-star" ng-show="CONFIG.make_date_mandatory">*</span>
+                    </h3>
                     <ul class="calendar">
                         <li ng-repeat="month in months" class="calendar-month">
                             <div class="calendar-month-title">{{month.label}}</div>
@@ -158,6 +167,10 @@
                         </li>
                     </ul>
                     <ul class="map-options">
+                        <li ng-click="setToday()" ng-show="today_within_range">
+                            <i class="fa fa-clock-o"></i>
+                            Use today's date
+                        </li>
                         <li ng-click="setDate(null)" ng-show="editing_user_data.date">
                             <i class="fa fa-trash"></i>
                             Remove date information
@@ -167,7 +180,10 @@
                 </li>
                 
                 <li class="lightbox-menu-item" ng-show="CONFIG.show_emoji_block">
-                    <h3>{{CONFIG.emoji_block_title}}</h3>
+                    <h3>
+                        {{CONFIG.emoji_block_title}}
+                        <span class="mandatory-star" ng-show="CONFIG.make_emoji_mandatory">*</span>
+                    </h3>
                     
                     <ul class="emojis">
                         <li ng-repeat="emoji in emojis" emoji="emoji" class="emoji-container" ng-class="hasEmoji(emoji) ? 'active' : 'inactive'" ng-click="toggleEmoji(emoji)"></li>
@@ -176,7 +192,10 @@
                 </li>
                 
                 <li class="lightbox-menu-item" ng-show="CONFIG.show_comment_block">
-                    <h3>{{CONFIG.comment_block_title}}</h3>
+                    <h3>
+                        {{CONFIG.comment_block_title}}
+                        <span class="mandatory-star" ng-show="CONFIG.make_comment_mandatory">*</span>
+                    </h3>
                     <textarea ng-model="editing_user_data.comment" class="comment-box" placeholder="{{CONFIG.comment_box_placeholder}}" scroll-focus></textarea>
                 </li>
             </ol>

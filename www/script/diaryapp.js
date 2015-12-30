@@ -166,8 +166,8 @@ function($scope, $window, $http, $timeout, idGen) {
     ];
     $scope.months = [];
     
-    var minDate = new Date($scope.CONFIG.start_date + 'T12:00:00.000Z'),
-        maxDate = new Date($scope.CONFIG.end_date + 'T12:00:00.000Z'),
+    var minDate = new Date($scope.CONFIG.start_date + 'T12:00:00.000Z').valueOf(),
+        maxDate = new Date($scope.CONFIG.end_date + 'T12:00:00.000Z').valueOf(),
         DAY_SPAN = 24*60*60*1000,
         currentMonth = null,
         currentWeek = null,
@@ -187,7 +187,9 @@ function($scope, $window, $http, $timeout, idGen) {
         }
     }
     
-    for (var d = minDate.valueOf(); d <= maxDate.valueOf(); d += DAY_SPAN) {
+    $scope.today_within_range = (today >= Math.floor(minDate/DAY_SPAN) && today <= Math.floor(maxDate/DAY_SPAN));
+    
+    for (var d = minDate; d <= maxDate; d += DAY_SPAN) {
         var dt = new Date(d),
             m = dt.getUTCMonth();
         if (m !== (currentMonth||{}).month_number) {
@@ -230,6 +232,10 @@ function($scope, $window, $http, $timeout, idGen) {
         if (d && d.active) {
             $scope.editing_user_data.date = d.date;
         }
+    };
+    
+    $scope.setToday = function() {
+        $scope.editing_user_data.date = (new Date).toISOString().substr(0,10);
     };
     
     /* CODE FOR ADDING/EDITING ENTRIES */
@@ -313,7 +319,24 @@ function($scope, $window, $http, $timeout, idGen) {
     };
     
     $scope.saveItem = function() {
-        var item = $scope.editing_item;
+        var item = $scope.editing_item,
+            missing_mandatory_items = [];
+        [
+            [ "comment", $scope.CONFIG.show_comment_block && $scope.CONFIG.make_comment_mandatory, "Text comment" ],
+            [ "image", $scope.CONFIG.show_media_block && $scope.CONFIG.make_media_mandatory, "Image upload" ],
+            [ "date", $scope.CONFIG.show_calendar_block && $scope.CONFIG.make_date_mandatory, "Date" ],
+            [ "emojis", $scope.CONFIG.show_emoji_block && $scope.CONFIG.make_emoji_mandatory, "Emotion(s)" ],
+            [ "location", $scope.CONFIG.show_location_block && $scope.CONFIG.make_location_mandatory, "Location" ]
+        ].forEach(function(t) {
+            if (!$scope.editing_user_data[t[0]] && t[1]) {
+                missing_mandatory_items.push(t[2]);
+            }
+        });
+        if (missing_mandatory_items.length) {
+            var msg = (missing_mandatory_items.length === 1 ? "The following mandatory item is missing:" : "The following mandatory items are missing:");
+            alert(msg + "\n" + missing_mandatory_items.join(", "));
+            return;
+        }
         for (key in user_data_generator) {
             item[key] = $scope.editing_user_data[key];
         }

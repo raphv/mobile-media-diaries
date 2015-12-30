@@ -2,6 +2,8 @@
 
 A basic configurable web-based media diary.
 
+Diary entries are stored centrally on a server, so researchers can easily access participants' data.
+
 You can specify questions to which diary entries should match, as well as limits in the number of diary entries.
 
 Diary entries can contain any of the following:
@@ -15,7 +17,19 @@ The list of fields available to the end-user is fully configurable.
 
 At the moment, the diary is set up so that diary organisers need to give out passcodes to their participants. This isn't very secure, future plans are to turn this into a login and password based system.
 
+### Alternative diaries
+
+If you expect participants to have poor connectivity, you may consider using apps that can work offline.
+
+Example of mobile apps that can be used as a diary include dedicated apps (e.g. Flava) and note-taking apps such as Evernote or OneNote.
+
+Alternatives also include blogging apps such as Tumblr and Wordpress.
+
 ## Known issues
+
+### Connectivity
+
+Though very basic mechanisms have been implemented to cope with flaky connectivity (multiple retries), the app was built to be used online and doesn't work well in poor connectivity situations.
 
 ### Low memory error on Android
 
@@ -60,6 +74,13 @@ Finally, local Node.js modules are not included in the repositories, you must in
     $ cd server
     $ npm install
 
+## Setting the admin password
+
+This is done using the command line:
+
+    $ cd server
+    $ node setpassword.js
+
 ## Running server
 
     $ cd server
@@ -98,7 +119,6 @@ Configuration options are being migrated to a single config.js file.
 
 ### Server-side configuration
 
-- **admin_user** and **admin_password** are the (*unencrypted* at the moment) credentials to connect to the admin backend.
 - **db_connection** specifies the 'hostname:port/database_name' used to connect to mongodb
 - **db_collection** is the name of the mongodb collection
 - Set **use_image_magick** to *true* if using ImageMagick, *false* if using GraphicsMagick
@@ -111,7 +131,9 @@ See comments in the file for more details on configuration options.
 
 ## Admin pages
 
-Admin pages are password-protected (see username/password in config.js)
+Admin pages are password-protected.
+
+Admin password is encrypted in the database. See the installation section above for instructions to set password.
 
 You can:
 - generate unique account IDs at http://localhost:3000/admin/id-generator Reload this page if you need more than 10 IDs.
@@ -119,9 +141,34 @@ You can:
 - see which questions are the most popular at http://localhost:3000/admin/popular-questions
 - export a dump of the diary entries database at http://localhost:3000/admin/dump-data/
 
+## Dependencies/Libraries used
+
+### Server-side
+
+#### Needed before install
+
+- Node.js
+- NPM
+- MongoDB
+- ImageMagick or GraphicsMagick
+
+#### Installed using NPM
+
+See the contents of server/package.json
+
+### Client-side
+
+The following libraries are all currently loaded through CDNs:
+
+- Angular.JS
+- Leaflet
+- FontAwesome
+- Leaflet Awesome Markers
+- Google Fonts Roboto
+- Twemoji
+
 ## Todo List
 
 - Improve security:
-    - encrypt admin password
     - switch the passcode system to a full user management system
 - Offer a 'takeaway' (e.g. download) page

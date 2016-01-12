@@ -1,4 +1,4 @@
-var diaryApp = angular.module("diaryApp", []);
+var diaryApp = angular.module("diaryApp", [ "ngSanitize" ]);
 
 diaryApp.factory('idGen', function() {
     function getStr(n) {
@@ -25,13 +25,16 @@ function($scope, $window, $http, $timeout, idGen) {
     $scope.diary_questions = [];
     $scope.locations = [];
     $scope.emojis = [];
+    
+    /* DISCLAIMER AND AUTHENTICATION */
+   
+    $scope.disclaimer_read = !$scope.CONFIG.show_disclaimer || (!!$window.localStorage.getItem('disclaimer_read') || '');
     $scope.auth_code = $window.localStorage.getItem('user_code') || '';
-    
-    /* (POOR) AUTHENTICATION */
-    
+      
     $scope.authenticate = function() {
         $scope.auth_code = $scope.auth_code.toUpperCase();
         var promise = $http.post('login',{"user_code": $scope.auth_code});
+        console.log('Logging in with '+$scope.auth_code);
         promise.success(function(data) {
             if (data.authenticated) {
                 $window.localStorage.setItem('user_code',$scope.auth_code);
@@ -47,6 +50,17 @@ function($scope, $window, $http, $timeout, idGen) {
         });
     };
     
+    $scope.autologin = function() {
+        if ($scope.CONFIG.auto_login) {
+            if ($scope.auth_code) {
+                $scope.authenticate();
+            } else {
+                $scope.auth_code = idGen.get();
+                $scope.authenticate();
+            }
+        }
+    };
+    
     $scope.generatePasscode = function() {
         var promise = $http.get('passcode');
         promise.success(function(data) {
@@ -58,6 +72,20 @@ function($scope, $window, $http, $timeout, idGen) {
         $scope.authenticated = false;
         $window.localStorage.removeItem('user_code');
     };
+    
+    $scope.agreeDisclaimer = function() {
+        $scope.disclaimer_read = true;
+        $window.localStorage.setItem('disclaimer_read','1');
+        $scope.autologin();
+    };
+    
+    $scope.declineDisclaimer = function() {
+        $window.alert($scope.CONFIG.decline_message);
+    };
+    
+    if ($scope.disclaimer_read) {
+        $scope.autologin();
+    }
        
     [
         'diary_questions',
@@ -604,6 +632,20 @@ diaryApp.filter('fieldBool', function() {
             var isnt = !item[fieldname];
             return (iswhat ? !isnt : isnt);
         });
+    };
+});
+
+diaryApp.filter('paragraphy', function() {
+    return function(text) {
+        var div = document.createElement('div');
+        (text||"").split(/[\r\n]+/).filter(function(t) {
+            return t.length;
+        }).forEach(function(t) {
+            var p = document.createElement('p');
+            p.textContent = t;
+            div.appendChild(p);
+        });
+        return div.innerHTML;
     };
 });
 

@@ -6,15 +6,24 @@ module.exports = {
         /* GENERAL CONFIGURATION */
         
         diary_title: 'Mobile Media Diaries',
+        
+        /* DISCLAIMER AND PASSCODE OPTIONS */
+        show_disclaimer: true,
+        disclaimer_message: "Here are some placeholder terms and conditions\nDo you agree to participate?",
+        agree_button_text: "I agree",
+        decline_button_text: "I decline",
+        decline_message: "Please close this browser tab",
         passcode_prompt_message: "Please enter the authentication code given by the researcher to access the diary",
         show_generate_passcode: true, // Show the 'Generate passcode' button on login page
         question_list_title: 'Please tell us about your experience…',
+        generate_passcode_label: "Generate a new passcode",
+        auto_login: true, // Will generate a random passcode and log in silently
+        
+        /* ENTRY LIST OPTION */
         diary_questions: "data/diaryquestions.json",
             /* DIARY QUESTIONS FILE URL CAN BE REPLACED BY A LIST OF A FORMAT MATCHING THAT OF THE EXAMPLE FILE */
         min_entries: 5,
         max_entries: false,
-        show_generate_passcode: true, // Show the 'Generate passcode' button on login page
-        generate_passcode_label: "Generate a new passcode",
         
         /* IMAGE BLOCK CONFIGURATION */
         show_media_block: true,

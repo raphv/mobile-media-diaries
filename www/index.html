@@ -16,6 +16,7 @@
         
         <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"> </script>
         <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"> </script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular-sanitize.min.js"> </script>
         <script src="//twemoji.maxcdn.com/twemoji.min.js"> </script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"> </script>
         
@@ -27,13 +28,31 @@
             <h1><i class="fa fa-calendar"></i> {{CONFIG.diary_title}}</h1>
         </header>
         <section class="main-section">
-            <form class="auth-form" ng-submit="authenticate()" ng-show="!authenticated">
-                <h2>{{CONFIG.passcode_prompt_message}}</h2>
-                <input type="text" class="auth-code" ng-model="auth_code" placeholder="Passcode" size="10" />
-                <input class="auth-submit" type="submit" value="Log in" ng-disabled="!auth_code" />
-                <a class="auth-passcode-gen" ng-click="generatePasscode()" ng-show="CONFIG.show_generate_passcode">{{CONFIG.generate_passcode_label}}</a>
-            </form>
-            <div ng-show="authenticated">
+            <div ng-show="!disclaimer_read">
+                <p ng-bind-html="CONFIG.disclaimer_message | paragraphy"></p>
+                <ul class="buttons">
+                    <li class="cancel-button" ng-click="declineDisclaimer()">
+                        <i class="fa fa-times"></i>
+                        {{CONFIG.decline_button_text}}
+                    </li>
+                    <li class="save-button" ng-click="agreeDisclaimer()">
+                        <i class="fa fa-check"></i>
+                        {{CONFIG.agree_button_text}}
+                    </li>
+                </ul>
+            </div>
+            <div ng-show="disclaimer_read && !authenticated">
+                <p ng-show="CONFIG.auto_login">
+                    Logging you in automatically...
+                </p>
+                <form class="auth-form" ng-submit="authenticate()" ng-show="!CONFIG.auto_login">
+                    <h2>{{CONFIG.passcode_prompt_message}}</h2>
+                    <input type="text" class="auth-code" ng-model="auth_code" placeholder="Passcode" size="10" />
+                    <input class="auth-submit" type="submit" value="Log in" ng-disabled="!auth_code" />
+                    <a class="auth-passcode-gen" ng-click="generatePasscode()" ng-show="CONFIG.show_generate_passcode">{{CONFIG.generate_passcode_label}}</a>
+                </form>
+            </div>
+            <div ng-show="disclaimer_read && authenticated">
             <ul class="main-list">
                 <li class="main-list-item">
                     <h2>{{CONFIG.question_list_title}}</h2>

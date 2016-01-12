@@ -88,7 +88,7 @@
                 <li ng-show="CONFIG.min_entries && diary_entries.length >= CONFIG.min_entries">Congratulations, you've reached the guideline!</h3>
                 <li ng-show="CONFIG.max_entries && CONFIG.min_entries !== CONFIG.max_entries">You can submit a maximum of {{CONFIG.max_entries}} entr{{CONFIG.max_entries < 2 ? 'y' : 'ies'}}.</h3>
             </ul>
-            <div class="re-authenticate">
+            <div class="re-authenticate" ng-show="!CONFIG.auto_login">
                 <p ng-click="logout()">Log out and re-enter authentication code</p>
             </div>
             </div>

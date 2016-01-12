@@ -2,6 +2,7 @@
 .project
 server/node_modules
 *.log
+config.js
 www/images/*.jpg
 www/images/*.gif
 www/images/*.png

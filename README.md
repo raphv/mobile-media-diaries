@@ -115,7 +115,9 @@ There are no user accounts per se at the moment. Any text string will be used as
 
 ## Configuration
 
-Configuration options are being migrated to a single config.js file.
+Configuration options are being migrated to a single **config.js** file.
+
+This file is copied from the config-sample.js file at install time, to avoid having it under version control.
 
 ### Server-side configuration
 

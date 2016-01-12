@@ -63,12 +63,6 @@ Another requirement is imagemagick (or graphicsmagick, see Configuration options
 
 The database used for the app is called by default "media-diaries" (can be changed in the config file, see below) and will be automagically created by MongoDB the first time the server is started.
 
-Venue list may change is not included in the repository. Please launch the following shell script (requires cURL):
-
-    $ cd datasources
-    $ chmod +x getvenuelist.sh
-    $ ./getvenuelist.sh
-
 Finally, local Node.js modules are not included in the repositories, you must install them using npm from the server directory.
 
     $ cd server

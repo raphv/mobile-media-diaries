@@ -110,16 +110,22 @@
                     
                     <form class="media-form" drop-image ng-class="{'dragging':dragging}">
                         <i class="fa fa-file-picture-o"></i>
-                        <p>Drop an image or open image from file</p>
+                        <i class="fa fa-file-video-o" ng-show="CONFIG.enable_video"></i>
+                        <p>Drop an image/video or open image/video from file</p>
                         <p>
-                            <input type="file" accept="image/*" />
+                            <input type="file" accept="image/*{{CONFIG.enable_video ? ',video/*' : ''}}" />
                         </p>
                     </form>
                     
                     <p class="image-status" ng-show="image_status">{{image_status}}</p>
                     
-                    <div ng-show="editing_user_data.image">
-                        <img class="image-preview" src="{{editing_user_data.image}}" />
+                    <div class="image-preview-container" ng-show="editing_user_data.image">
+                        <a href="{{editing_user_data.original_media||'#'}}" target="{{editing_user_data.original_media ? '_blank' : ''}}">
+                            <img class="image-preview" src="{{editing_user_data.image}}" />
+                        </a>
+                        <div class="image-preview-type" ng-show="CONFIG.enable_video">
+                            <i class="fa {{editing_user_data.media_type === 'video' ? 'fa-video-camera' : 'fa-picture-o' }}"></i>
+                        </div>
                         <p class="remove-media" ng-click="removeImage()">
                             Remove Media
                         </p>

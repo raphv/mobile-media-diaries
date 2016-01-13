@@ -2,6 +2,7 @@ module.exports = {
     db_connection: 'localhost/media-diaries',
     db_collection: 'entries',
     use_image_magick: true,
+    video_converter_command: 'avconv',
     client_config: {
         /* GENERAL CONFIGURATION */
         
@@ -27,7 +28,9 @@ module.exports = {
         
         /* IMAGE BLOCK CONFIGURATION */
         show_media_block: true,
-        media_block_title: "Share an image",
+        media_block_title: "Share a media",
+        enable_video: true,
+        maximum_upload_size: 8,
         make_media_mandatory: false, // Not recommended, because Android users with low-end devices won't be able to use the app at all
         
         /* LOCATION BLOCK CONFIGURATION */

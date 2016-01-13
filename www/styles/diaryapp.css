@@ -177,8 +177,18 @@ footer p {
     background: #ffccff; margin: 4px 0 0;
 }
 
+.image-preview-container {
+    position: relative;
+}
+
 .image-preview {
     display: block; max-height: 200px; max-width: 100%; margin: 0 auto;
+    min-width: 4em; min-height: 4em;
+}
+
+.image-preview-type {
+    position: absolute; left: .2em; top: .1em;
+    color: #000000; font-size: 2em; text-shadow: 0 0 2px #ffffff;
 }
 
 .remove-media {

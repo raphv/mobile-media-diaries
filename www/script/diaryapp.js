@@ -272,6 +272,8 @@ function($scope, $window, $http, $timeout, idGen) {
         comment: "",
         image: "",
         thumbnail: '',
+        original_media: '',
+        media_type: '',
         upload_id: '',
         date: '',
         emojis: '',
@@ -697,15 +699,16 @@ function($window, idGen) {
                     });
                     return;
                 }
-                if (file.type.slice(0,5) !== "image") {
+                var ftypeparts = file.type.split("/");
+                if (ftypeparts[0] !== "image" && ftypeparts[0] !== "video") {
                     /* If the file is not an image, we discard it */
-                    $window.console.log("Not an image");
+                    $window.console.log("Not an image or video");
                     scope.$apply(function() {
-                        scope.image_status = 'This is not an image.';
+                        scope.image_status = 'This is not an image nor a video.';
                     });
                     return;
                 }
-                var _MAXSIZE_MB = 5;
+                var _MAXSIZE_MB = (( scope.CONFIG || {} ).maximum_upload_size || 10);
                 if (file.size > _MAXSIZE_MB*1024*1024) {
                     /* If the image is too large (over n MB), we discard it
                      * This is an arbitrary limit, and there is no limit
@@ -713,7 +716,7 @@ function($window, idGen) {
                      * (which is the case for local file system images) */
                     $window.console.log("Image too large");
                     scope.$apply(function() {
-                        scope.image_status = 'This is image is too large (must be less than ' + _MAXSIZE_MB + 'MB).';
+                        scope.image_status = 'This file is too large (must be less than ' + _MAXSIZE_MB + 'MB).';
                     });
                     return;
                 }
@@ -746,6 +749,8 @@ function($window, idGen) {
                                 var res = JSON.parse(xhr.responseText);
                                 console.log(res);
                                 scope.$apply(function() {
+                                    entry.media_type = res.media_type;
+                                    entry.original_media = res.original;
                                     entry.image = res.image;
                                     entry.thumbnail = res.thumbnail;
                                     entry.upload_id = '';
@@ -772,7 +777,7 @@ function($window, idGen) {
                 sendFile();
                 
                 scope.$apply(function() {
-                    scope.image_status = 'Uploading image';
+                    scope.image_status = 'Uploading ' + ftypeparts[0];
                 });
                 
             }

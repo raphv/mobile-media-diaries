@@ -17,20 +17,21 @@ var fs = require('fs');
 var gulp = require('gulp');
 var imageResize = require('gulp-image-resize');
 var passhash = require('password-hash');
+var ffmpeg = require('fluent-ffmpeg');
 
 var app = express();
 var db = monk(config.db_connection);
 var collection = db.get(config.db_collection);
 var config_collection = db.get(config.db_collection + '_config');
-var destpath = path.resolve(__dirname, '../www/images');
 var upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, cb) {
-            cb(null, destpath);
+            var dir = (file.mimetype.split("/")||['image'])[0] + 's';
+            cb(null, path.resolve(__dirname, '../www/' + dir));
         },
         filename: function (req, file, cb) {
-            var ext = ({'image/jpeg':'.jpg', 'image/png':'.png', 'image/gif':'.gif'})[file.mimetype];
-            cb(null, req.body._id + ext);
+            var ext = (file.mimetype.split("/")||['','unknown'])[1];
+            cb(null, req.body._id + '.' + ext);
         }
     })
 });
@@ -60,30 +61,55 @@ app.get('/config', function(req, res) {
 /* ENDPOINTS CALLED FROM STATIC MAIN VIEW */
 
 app.post('/media-uploader', upload.single('image'), function(req, res) {
-    gulp.src(req.file.path)
-        .pipe(imageResize({
-            width: 400,
-            height: 400,
-            quality: .7,
-            upscale: false,
-            imageMagick: config.use_image_magick,
-        }))
-        .pipe(gulp.dest(path.resolve(__dirname, '../www/images/min/')))
-        .pipe(imageResize({
-            width: 48,
-            height: 48,
-            quality: .5,
-            crop: true,
-            upscale: false,
-            imageMagick: config.use_image_magick,
-        }))
-        .pipe(gulp.dest(path.resolve(__dirname, '../www/images/thumbnails/')))
-        .on('end', function() {
-            res.json({
-                image: 'images/min/' + req.file.filename,
-                thumbnail: 'images/thumbnails/' + req.file.filename
+    var ftypeparts = req.file.mimetype.split("/");
+        
+    function renderImage(fpath) {
+        gulp.src(req.file.path)
+            .pipe(imageResize({
+                width: 400,
+                height: 400,
+                quality: .7,
+                upscale: false,
+                imageMagick: config.use_image_magick,
+            }))
+            .pipe(gulp.dest(path.resolve(__dirname, '../www/images/min/')))
+            .pipe(imageResize({
+                width: 48,
+                height: 48,
+                quality: .5,
+                crop: true,
+                upscale: false,
+                imageMagick: config.use_image_magick,
+            }))
+            .pipe(gulp.dest(path.resolve(__dirname, '../www/images/thumbnails/')))
+            .on('end', function() {
+                res.json({
+                    original: 'images/' + req.file.filename,
+                    image: 'images/min/' + req.file.filename,
+                    thumbnail: 'images/thumbnails/' + req.file.filename,
+                    media_type: ftypeparts[0]
+                });
             });
-        });
+    }
+    
+    switch (ftypeparts[0]) {
+        case "image":
+            renderImage(req.file.path);
+        break;
+        case "video":
+            var imgpath = path.resolve(__dirname, '../www/images/' + req.file.filename + '.jpg');
+            var cmd = config.video_converter_command
+                + ' -ss 00:00:01 -i "'
+                + req.file.path
+                + '" "'
+                + imgpath
+                + '"';
+            require('child_process').exec(cmd, function () {
+                renderImage(imgpath);
+            });
+        break;
+    }
+    
 });
 
 app.post('/login', jsonParser, function(req, res) {

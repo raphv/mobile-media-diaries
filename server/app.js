@@ -17,7 +17,6 @@ var fs = require('fs');
 var gulp = require('gulp');
 var imageResize = require('gulp-image-resize');
 var passhash = require('password-hash');
-var ffmpeg = require('fluent-ffmpeg');
 
 var app = express();
 var db = monk(config.db_connection);

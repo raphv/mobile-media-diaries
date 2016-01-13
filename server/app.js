@@ -14,6 +14,7 @@ var monk = require('monk');
 var multer = require('multer');
 var path = require('path');
 var fs = require('fs');
+var child_process = require('child_process');
 var gulp = require('gulp');
 var imageResize = require('gulp-image-resize');
 var passhash = require('password-hash');
@@ -61,50 +62,47 @@ app.get('/config', function(req, res) {
 
 app.post('/media-uploader', upload.single('image'), function(req, res) {
     var ftypeparts = req.file.mimetype.split("/");
-        
-    function renderImage(fpath) {
-        gulp.src(req.file.path)
-            .pipe(imageResize({
-                width: 400,
-                height: 400,
-                quality: .7,
-                upscale: false,
-                imageMagick: config.use_image_magick,
-            }))
-            .pipe(gulp.dest(path.resolve(__dirname, '../www/images/min/')))
-            .pipe(imageResize({
-                width: 48,
-                height: 48,
-                quality: .5,
-                crop: true,
-                upscale: false,
-                imageMagick: config.use_image_magick,
-            }))
-            .pipe(gulp.dest(path.resolve(__dirname, '../www/images/thumbnails/')))
-            .on('end', function() {
-                res.json({
-                    original: 'images/' + req.file.filename,
-                    image: 'images/min/' + req.file.filename,
-                    thumbnail: 'images/thumbnails/' + req.file.filename,
-                    media_type: ftypeparts[0]
-                });
-            });
-    }
+    var filenoext = req.file.filename.split(".")[0];
+    var minfile = path.resolve(__dirname, '../www/images/min/' + filenoext + '.jpg');
+    var thumbfile = path.resolve(__dirname, '../www/images/thumbnails/' + filenoext + '.jpg');
+    var jsonres = {
+        original: ftypeparts[0] + 's/' + req.file.filename,
+        image: 'images/min/' + filenoext + '.jpg',
+        thumbnail: 'images/thumbnails/' + filenoext + '.jpg',
+        media_type: ftypeparts[0]
+    };
     
     switch (ftypeparts[0]) {
         case "image":
-            renderImage(req.file.path);
+            var cmd = 'convert "'
+                + req.file.path
+                + '"  -auto-orient -strip -resize "400x400>" -quality 60 -write "'
+                + minfile
+                + '"  -resize "48x48^" -gravity center -extent 48x48 -quality 50 "'
+                + thumbfile
+                + '"';
+            child_process.exec(cmd, function () {
+                res.json(jsonres);
+            });
         break;
         case "video":
-            var imgpath = path.resolve(__dirname, '../www/images/' + req.file.filename + '.jpg');
-            var cmd = config.video_converter_command
+            var imgpath = path.resolve(__dirname, '../www/images/' + filenoext + '.jpg');
+            var cmd0 = config.video_converter_command
                 + ' -ss 00:00:01 -i "'
                 + req.file.path
                 + '" "'
                 + imgpath
                 + '"';
-            require('child_process').exec(cmd, function () {
-                renderImage(imgpath);
+            var cmd1 = 'convert "'
+                + imgpath
+                + '" -write mpr:tmp +delete -respect-parentheses "(" mpr:tmp -resize 400x300 -background black -gravity center -extent 400x300 -fill white -stroke black -draw "polygon 170,115 230,150 170,185" -quality 60 +write "'
+                + minfile + '" ")" "(" mpr:tmp -resize 48x36^ -gravity center -background black -extent 48x36 -extent 48x48 -fill white -stroke black -draw "polygon 16,14 32,24 16,34" -quality 50 +write "'
+                + thumbfile
+                + '" ")" null:';
+            child_process.exec(cmd0, function () {
+                child_process.exec(cmd1, function () {
+                    res.json(jsonres);
+                });
             });
         break;
     }

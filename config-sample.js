@@ -1,7 +1,6 @@
 module.exports = {
     db_connection: 'localhost/media-diaries',
     db_collection: 'entries',
-    use_image_magick: true,
     video_converter_command: 'avconv',
     image_converter_command: 'convert',
     client_config: {

@@ -117,7 +117,8 @@ This file is copied from the config-sample.js file at install time, to avoid hav
 
 - **db_connection** specifies the 'hostname:port/database_name' used to connect to mongodb
 - **db_collection** is the name of the mongodb collection
-- Set **use_image_magick** to *true* if using ImageMagick, *false* if using GraphicsMagick
+- **video_converter_command** is the path to either ffmpeg or avconv
+- **image_converter_command** is the path to the ImageMagick command line (convert)
 
 ### Client-side configuration
 

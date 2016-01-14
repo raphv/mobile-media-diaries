@@ -1,4 +1,4 @@
-var diaryApp = angular.module("diaryApp", [ "ngSanitize" ]);
+var diaryApp = angular.module("diaryApp", []);
 
 diaryApp.factory('idGen', function() {
     function getStr(n) {
@@ -453,13 +453,12 @@ function($scope, $window, $http, $timeout, idGen) {
         });
     }
     $scope.getLocation = function() {
-        if (!$scope.CONFIG.use_geolocation) {
-            return;
+        if ($scope.CONFIG.show_location_block && $scope.CONFIG.use_geolocation) {
+            $window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {
+                timeout: 10*1000,
+                watch: false
+            });
         }
-        $window.navigator.geolocation.getCurrentPosition(locationSuccess, locationError, {
-            timeout: 10*1000,
-            watch: false
-        });
     };
     $scope.setPositionGPS = function() {
         $scope.editing_user_data.location = "Geolocation [" + $scope.coords.latitude.toFixed(5) + "," + $scope.coords.longitude.toFixed(5) + "]",
@@ -637,20 +636,6 @@ diaryApp.filter('fieldBool', function() {
     };
 });
 
-diaryApp.filter('paragraphy', function() {
-    return function(text) {
-        var div = document.createElement('div');
-        (text||"").split(/[\r\n]+/).filter(function(t) {
-            return t.length;
-        }).forEach(function(t) {
-            var p = document.createElement('p');
-            p.textContent = t;
-            div.appendChild(p);
-        });
-        return div.innerHTML;
-    };
-});
-
 diaryApp.directive("emoji", function() {
     return {
         link: function(scope, element, attrs) {
@@ -700,11 +685,11 @@ function($window, idGen) {
                     return;
                 }
                 var ftypeparts = file.type.split("/");
-                if (ftypeparts[0] !== "image" && ftypeparts[0] !== "video") {
+                if (ftypeparts[0] !== "image" && (!scope.CONFIG.enable_video || ftypeparts[0] !== "video")) {
                     /* If the file is not an image, we discard it */
                     $window.console.log("Not an image or video");
                     scope.$apply(function() {
-                        scope.image_status = 'This is not an image nor a video.';
+                        scope.image_status = 'This is not an accepted file format';
                     });
                     return;
                 }

@@ -42,11 +42,18 @@ redirect(app);
 collection.index('user_code');
 
 app.locals.moment = require('moment');
+app.locals.pretty = true;
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-app.use(express.static(path.resolve(__dirname, '../www')));
+app.use(express.static(path.resolve(__dirname, '../www/')));
+    
+app.get('/', function(req, res) {
+    res.render('index', {
+        config: config.client_config
+    });
+});
 
 /* Config endpoint */
 
@@ -74,7 +81,8 @@ app.post('/media-uploader', upload.single('image'), function(req, res) {
     
     switch (ftypeparts[0]) {
         case "image":
-            var cmd = 'convert "'
+            var cmd = config.image_converter_command
+                + ' "'
                 + req.file.path
                 + '"  -auto-orient -strip -resize "400x400>" -quality 60 -write "'
                 + minfile
@@ -88,12 +96,13 @@ app.post('/media-uploader', upload.single('image'), function(req, res) {
         case "video":
             var imgpath = path.resolve(__dirname, '../www/images/' + filenoext + '.jpg');
             var cmd0 = config.video_converter_command
-                + ' -ss 00:00:01 -i "'
+                + ' -ss 00:00:00.500 -i "'
                 + req.file.path
                 + '" "'
                 + imgpath
                 + '"';
-            var cmd1 = 'convert "'
+            var cmd1 = config.image_converter_command
+                + ' "'
                 + imgpath
                 + '" -write mpr:tmp +delete -respect-parentheses "(" mpr:tmp -resize 400x300 -background black -gravity center -extent 400x300 -fill white -stroke black -draw "polygon 170,115 230,150 170,185" -quality 60 +write "'
                 + minfile + '" ")" "(" mpr:tmp -resize 48x36^ -gravity center -background black -extent 48x36 -extent 48x48 -fill white -stroke black -draw "polygon 16,14 32,24 16,34" -quality 50 +write "'

@@ -15,8 +15,6 @@ var multer = require('multer');
 var path = require('path');
 var fs = require('fs');
 var child_process = require('child_process');
-var gulp = require('gulp');
-var imageResize = require('gulp-image-resize');
 var passhash = require('password-hash');
 
 var app = express();
